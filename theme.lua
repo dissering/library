@@ -48,9 +48,9 @@ local ThemeManager = {
     DefaultThemeName = nil,
 
     BuiltInThemes = {
-        ["Default"] = {
-            1,
-            { FontColor = "ffffff", MainColor = "191919", AccentColor = "7d55ff", BackgroundColor = "0f0f0f", OutlineColor = "282828", BackgroundImage = "" },
+       ["Default"] = {
+           1,
+           { FontColor = "f5f0e8", MainColor = "1a1613", AccentColor = "d67a55", BackgroundColor = "12100e", OutlineColor = "3a332c", BackgroundImage = "" },
         },
         ["BBot"] = {
             2,
