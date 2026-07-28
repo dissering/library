@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("\https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
 
 do -- Example
     local Window = Library:Window({
