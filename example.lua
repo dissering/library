@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/sametexe001/sametlibs/refs/heads/main/Serotonin/Library.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
 
 local Window = Library:Window({Name = "Window", Logo = "90363697817722"})
 local Watermark = Library:Watermark("This is a watermark")
