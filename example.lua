@@ -1,150 +1,241 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
 
-do -- Example
-    local Window = Library:Window({
-        Logo = "123748867365417",
-        FadeSpeed = 0.15,
-        PagePadding = 19,
-        --Size = UDim2.new(0, 681, 0, 481)
-    })
+local Window = Library:Window({
+    Logo = "rbxassetid://124454910007637",
+    Build = "Public"
+}) 
 
+local KeybindList = Library:KeybindList()
+local Watermark = Library:Watermark("This is a watermark", "rbxassetid://124454910007637")
+
+do 
     local Pages = {
-        ["One"] = Window:Page({Icon = "109391165290124", Search = true}),
-        ["Two"] = Window:Page({Icon = "72974659157165", Search = false}),
-        ["_"] = Window:Seperator(),
-        ["Three"] = Window:Page({Icon = "109391165290124", Search = true}),
-        ["Four"] = Window:Page({Icon = "129960652808688", Search = true}),
-        ["__"] = Window:Seperator(),
-        ["Five"] = Window:Page({Icon = "112887626955824", Search = true}),
-        ["Six"] = Window:Page({Icon = "72974659157165", Search = false}),
-        ["Seven"] = Window:Page({Icon = "82402610527668", Search = true}),
-        ["Eight"] = Window:Page({Icon = "72974659157165", Search = true}),
-        ["Nine"] = Window:Page({Icon = "82402610527668", Search = true}),
-    } do -- First Tab 
-        local AimbotSubpage = Pages["One"]:SubPage({Name = "Aimbot"})
-        local SilentSubpage = Pages["One"]:SubPage({Name = "Silent"})
+        ["Combat"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
+        ["Combat2"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
+        ["Combat3"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
+        ["Combat4"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
+        ["Combat5"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
+        ["Combat6"] = Window:Page({Icon = "rbxassetid://113972874520335"}), -- wait .. 6 7?
+        ["Combat7"] = Window:Page({Icon = "rbxassetid://113972874520335"}), -- wait .. 6 7?
 
-        do  -- Aimbot Subpage 
-            local AimbotSection = AimbotSubpage:Section({Name = "Aimbot", Side = "Left"})
+        --[[
+            ++++++++++==========+++++**************************+++++++==++++++++****************+++++++*****####
+            ++++++++++===========++++*****************************+++++++++++++++**********+++++++++++++++++****
+            ++++++++++===========++++********************************+++++++++++++******+++++=============++++++
+            ++++++++++============+++**********************************++++++++++++***++++=========--=======++++
+            *+++++++++====-----===++++**************************###*****+++++++++++++++++====-----------========
+            ****++++++====-----====++++************************######****+++++++++++++++=====-----------========
+            ****+++++====-------====+++++**********************#######****+++++++++++++++=====----------========
+            :.:=:::.....:::::::::::::::::::::::::-:...::::::--==++==-:.:::..:::..:::.:::::::::--+#%%#:::::::-===
+            :::--:::....:::::::::::::::::::::::::-:...:-==++=---:::...::....:------::::-==-::::=#+=+#*:...:::--+
+            :::--:::....::::::::::::::::::::::::--:...:---:::.........:-:-:::-----::::=*+#%=...:=====:....:::=-+
+            :::--:::....::::::::::::::::::::-==+=-:...................:::::::-::=**=:::===+:.....-==:....:*%%%=-
+            :::---::....:::::::::::::::-===--=--===--:.................:...::::-####-.:-++-...........==:=*****-
+            :::=--::....::::::::---===--:-==++==-=+=====-:.............:....::::-++=::.:++:.........:-:=***#%%%*
+            :::=--::...:::::::==--:::-==+=+=+++==-=-++++===-:...............:::.:**-.:++=-=::..:-:-==-==+*#%%%@@
+            :::=--:::::.:::::::...:=-+=++++======++-=**+++====-:......::=*=+*#+..:-:::++=++===+++=::-=+++*#%%%%@
+            :::=-=--....:::::::..-=-+--==*++-===+=+===+++++=-==-:...-=++##****+:-=+++***+++++***+-:::=*+===+#%%%
+            ::-==-::...::::::::.-=-=-+===***--=======-++=:-=====-::-*#+##*==++*****#****+++++**#+-+++=+==***+*==
+            :::::::.....:::::::----=+*+=+*+=-=++==-=-----==+++++==--+*==+#**#*###########**##%%#:-**++**###%#*%%
+            .:---::-==-::::::-==--==+===*+-==+++=+++++==++******+---+***#*##**###%%#%%#%%#*#=..::-++====++*##%%%
+            .:++=::#%%@%###+-===-+=++****+*+++====++***######*++++=+=++**####+*#*#%%%#*%%%+....:=++=====#%#%%%%@
+            ::+%#=:-***=+**+==+=******+++++++++=--=+****++++++*###*+++=+*##++*=---=*+*++%*-::-+++*+##%###%%%%%@@
+            ---:---+##*+#%#*==--==++++*+****+++=---+***###*#%**#####+==+*#=-------=====%*=##+==+#%%%###%%%%%%@@@
+            ==+====####+-==+++***#****%*##%+*+==-:-=++*+%%%*****#%###++==**+=---==-=++*+-#%**+***%%%##%%%%%%%@@@
+            =+++==+=#***+++++**####*++=========-::-======++====+*%%%#*+=+*#++=====++==+##%%##++*##%#%%%%%%%%@@@@
+            *++++=++*#+++=++****###=------------::--==----------=#%%#*+=-===--=+**++=-=#%%++*###**#%%%%@@@%@@@@@
+            ***++=+*+*****+*#**###+-:::::::::-:--=+++==----------*%@%#++==-==+**+==----*%@%%####*##@@%@@@@@@@@@@
+            ##**+=+*+-=**#**#**###+:::::::---=*%#+*#@*+---------=*@@%------:::-===-=----+%%%####%%#@@%@@@@@@@@@@
+            ###*+=+*+==++=-=++*###*------=++--+==++++*=--========*@@%*=++=-------==---:::--+%@@@@%%%@@@@@@@@@@@@
+            #%*==++++=-:---=+*#*+##----=+*+=::::--------=++++++++*%%%#++++==-::::---::::---::-+#%@%%@@@@@@@@@@@@
+            @#==+*+*=---=====+++*#*-===+*+-::-===-=-----=++++++++*#%%%**+++=----===----------::--*%%@@@@@@@@@@@@
+            %+=+*+++=----===+******-====+++#*++======**#**+++++++@@%###*+*++==++++===---------===*%%@@@@@@@@@@@@
+            #*****+==----=++**+#*#%%====+=#%%#%@@@@@@@@@@#+==+++*%%%#*#**+++++****+==--------=+=+*@%%@@@@@@@@@@@
+            #%%%#*++=====++++**####@-=--===#%*++*#####%@%++==+++%%@%#***+++++*****+==-::--:::-=++#%%%@@@@@@@@@@@
+            ###*+++======+++*%#%%%#%@==-=---+##=+++++*#+====++*#@%%%#**++++**+****+=::::-======+#%@%%%@@@@@@@@@@
+            ++++++++++++++*%%#*#%%%#@@=----------=====++====+*#@@@%%**%#+=-=*+++*+++=---++++++=+#%%%%%@%@@@@@@@@
+            +======+++++***#%%##%%%%%@%=-----=+++++**+++===+**#%#%%#*+++*=---=+++++++=-=+****+-:=%%%%%@@+-:-*@@@
+            ===+=====++++****####%%%%@@+=------===========+******%##**+*+=----+******+=+*****=::--#%%%#====-=#@@
+            +********###*****+-=***%@@@*==---:--------===+*****+*###*+*#===---==+*****+++****=:::::=*+=+++++*%@@
+            ***********##%##=--====+#%%*====-------====+******++*#**++**=====+----+***++++**++==-:::-=++****%@@@
+            *************#*:----====+##*=-==+======+++********+**+++++*===+*+=-----=*********+***+-==+****#@@@@@
+            *************-::---======+#*=====+++++++********#*###++++*=++**+=------==************++++****#@@@@@@
+            *************=-:----======+**====++++++++*******##****+++++##*+==--=======+******************%@@@@@@
+            **#####****-:--=-------=====++==+++++++++*****##****++++*##*++======+==+++++=****************%@@@@@@
+            %#*+*****-::----=*==------==++*++++++*******#******++**#%#*+++++==+++==++++-==**************#@@@@@@@
+            %%%####=::::------=#*+-=-====++++********#*++++***########+++++++++++++++*++++*************+*######*
+            %%%###::::::--------+#**+======++++**###*++*##****#######*++++++++++++*++*+*%%%***********+++****+++
+            %%%%#=:::------===---=******++++++++++++********#######*++++++++*++++**+*++*###*+*+++++++++++++**+++
+            %%%##:::--------=======+**+++*****+++++*+************#*+++++++++*++++#**++****#=**+*++++++++++*+++++
+            %%%#-:-:--=-----========+++++++++++++++*+++***********+++++++++**+++****+++##**+#**+++++++++++++**+*
+            %%%*------========++====+++++++++++++++*******##****++++++++++*#+++*#**+++**#**+**++++++++++++++++**
+            %%%+-----==========+++===++++++++=++++++*+***###***+++++*++++*#*++*#**+++*#*#********+++++++++++++**
+            %%%=-----===+======+++++=++========++++++****###**++==+**++++*#+++#**+++**#*#************++**++++++*
+            ***-:=---=====+++===+++++=++=======++++++++**##**+++++**++=++#***##*+++***#*#**##***++++++++++++++++
+            %%*---==-======+++==+++++++++=======+++++++**##*++++++*++=++#*++##++********#**##@*******+++++++++++
+            %%-==--========+=++==+*+++++++=+====+++++++*****+++++**+++++#++***#*****#******##@@#******++++++++++
+            %*===----=+++=+=++++=+****+=++++=====++++++*****++++**+++++#*++##*+****##******#%@@@%************++*
+            %+-===--=====*===++**++****++++======+++++*****+++***+++++**++#**++++*********##%@@@@%**************
+            %+-=======+===++++++*++*****+++=======++++*****+*****+++++#++#*++++*********#**#@@@@@@@#**********#%
+            @+==========++**++++*#++****++++=======++++********++++++**+**+++++*********##%@@@@@@@@@%*#****##%@@
+            %*--=+=========++*+****++****+++======++++***********++++#**#*++++********##**%@@@@@@@@@%%####%@@@@@
+            %#--=++===+======+*+**#++***#*+=+=====++++******#%%##*++***#++++++*****##*****%@@@@@@@@@%%%%@@@@@@@@
+            @@=-==++====++====+***********++=====++++********#*###%*#*#++++***#***********%@@@@%@@@@@@@%@@@@@@@@
+            ++++++++++++++******************************############********++++++++++++++++++++++++++++++++++++
+            ++++++++++++++++++++*************************##########*******+++++++++++++++++++++++++++++++++**+++
+            +++++++++++++++++++++************************########********+++++++++++++++++++++++++++++++******++
+            +++++++++++++++++++++*****************#****###*###*##**#*****+*++++++++++++++++++++++++++++*******++
+            ++++++++++++++++++++++****************#@==@%==%==@+===*@%#=-#%+++++++++++++++++++++++++++*********++
+            +++++++++++++++++++++++***************##::-:-@*:=%::*-.:@.*::#*+++++++++++++++*++++++++**********+++
+            ++++++++++++++++++++++++**************%-:::%%@=:**:=@#:-@--.=%*++++++++++++++****+++++***********+++
+            ++++++++++++++++++++++++*************#@::*.:@@::%=.+@-:#@::@*+++++++++++++++******+++***********++++
+            +++++++++++++++++++++++**************#%::@#::%::@::::=%#@.-@+++++++++++++++******+++***********+++++
+            +++++++++++++++++++++++++*************######*******+*++++***++++++++++++++*******+++***********++++*
+            ====+++++++++++++++++++++++**********###*******++++++++++++++++++++++++++********************++++++*
+        ]]
+    }
 
-            do -- Aimbot section
-                local Toggle = AimbotSection:Toggle({
-                    Name = "Enable", 
-                    Flag = "Enable", 
+    local SettingsPage = Library:CreateSettingsPage(Window, KeybindList, Watermark)
+
+    do -- Combat 1
+        local SubPages = {
+            ["Ragebot"] = Pages["Combat"]:SubPage({Name = "Ragebot"}),
+            ["Aimbot"] = Pages["Combat"]:SubPage({Name = "Aimbot"}),
+            ["Visuals"] = Pages["Combat"]:SubPage({Name = "Visuals"}),
+            ["Misc"] = Pages["Combat"]:SubPage({Name = "Misc"})
+        }
+
+        do -- Ragebot
+            local SectionLeft = SubPages["Ragebot"]:Section({Name = "General"})
+            local SectionRight = SubPages["Ragebot"]:Section({Name = "General"})
+
+            do -- Section left
+                local NoticesBulgeOwoWhatsThisQuestionMark = SectionLeft:Toggle({
+                    Name = "Toggle",
+                    Flag = "Toggle",
                     Default = false,
                     Callback = function(Value)
                         print(Value)
                     end
                 })
 
-                Toggle:Keybind({
-                    Name = "Keybind",
+                for i = 1, 20 do 
+                    SectionLeft:Toggle({
+                        Name = "Toggle "..i,
+                        Flag = "Toggle"..i,
+                        Default = false,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+                end
+
+                NoticesBulgeOwoWhatsThisQuestionMark:Colorpicker({
+                    Flag = "Colorpicker",
+                    Default = Color3.fromRGB(255, 255, 255),
+                    Alpha = 0,
+                    Callback = function(Value)
+                        print(Value)
+                    end
+                })
+
+                NoticesBulgeOwoWhatsThisQuestionMark:Keybind({
+                    Name = "Yo ts a keybind",
                     Flag = "Keybind",
-                    Default = Enum.KeyCode.X,
+                    Default = Enum.KeyCode.RightShift,
                     Mode = "Toggle",
                     Callback = function(Value)
                         print(Value)
                     end
                 })
 
-                Toggle:Colorpicker({
-                    Name = "Colorpicker", 
-                    Flag = "Colorpicker", 
-                    Default = Color3.fromRGB(255, 255, 255), 
-                    Callback = function(Value, Alpha)
-                        print(Value, Alpha)
-                    end
-                })
-
-                AimbotSection:Button({
+                SectionLeft:Button({
                     Name = "Button",
                     Callback = function()
                         print("Button")
                     end
                 })
 
-                AimbotSection:Button({
-                    Name = "Button",
-                    Callback = function()
-                        print("Button")
-                    end
-                }):SubButton({
-                    Name = "SubButton",
-                    Callback = function()
-                        print("SubButton")
-                    end
-                })
-
-                AimbotSection:Slider({
-                    Name = "Slider", 
-                    Flag = "Slider", 
-                    Min = 0, 
-                    Default = 0, 
-                    Max = 100, 
-                    Suffix = "%", 
-                    Decimals = 1, 
+                SectionLeft:Slider({
+                    Name = "Slider",
+                    Flag = "Slider",
+                    Default = 50,
+                    Compact = false,
+                    Min = 0,
+                    Max = 100,
+                    Decimals = 1,
+                    Suffix = "%",
                     Callback = function(Value)
                         print(Value)
                     end
                 })
 
-                AimbotSection:Dropdown({
-                    Name = "Dropdown", 
-                    Flag = "Dropdown", 
-                    Items = { "One", "Two", "Three", "Four" }, 
+                SectionLeft:Slider({
+                    Name = "Slider",
+                    Flag = "Slider",
+                    Default = 50,
+                    Compact = true,
+                    Min = 0,
+                    Max = 100,
+                    Decimals = 1,
+                    Suffix = "%",
+                    Callback = function(Value)
+                        print(Value)
+                    end
+                })
+
+                SectionLeft:Dropdown({
+                    Name = "Dropdown",
+                    Flag = "Dropdown",
                     Multi = false,
-                    MaxSize = 50,
+                    Items = {"First", "Second", "Third", "Fourth", "Fifth", "Sixth"},
+                    Default = "First",
                     Callback = function(Value)
                         print(Value)
                     end
                 })
 
-                AimbotSection:Dropdown({
-                    Name = "Multi Dropdown", 
-                    Flag = "Multi Dropdown", 
-                    Items = { "One", "Two", "Three", "Four" }, 
-                    Multi = true,
-                    MaxSize = 75,
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
+                local murderalljewsandhangallniggers=SectionLeft:Label("jasdasd")
+                for i=1,5 do
+                    murderalljewsandhangallniggers:Colorpicker({
+                        Flag = "Colorpicker"..i,
+                        Default = Color3.fromRGB(math.random(1, 255), math.random(1, 255), math.random(1, 255)),
+                        Alpha = 0,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+                end
 
-                local ColorpickerLabel = AimbotSection:Label("Colorpicker", "Left")
-
-                ColorpickerLabel:Colorpicker({ 
-                    Name = "Colorpicker", 
-                    Flag = "Colorpicker", 
-                    Default = Color3.fromRGB(255, 255, 255), 
-                    Callback = function(Value, Alpha)
-                        print(Value, Alpha)
-                    end
-                })
-
-                ColorpickerLabel:Colorpicker({ 
-                    Name = "Colorpicker", 
-                    Flag = "Colorpicker", 
-                    Default = Library.Theme.Accent, 
-                    Callback = function(Value, Alpha)
-                        print(Value, Alpha)
-                    end
-                })
-
-                AimbotSection:Keybind({
-                    Name = "Keybind",
-                    Flag = "Keybind",
-                    Default = Enum.KeyCode.C,
-                    Mode = "Toggle",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                AimbotSection:Textbox({
+                SectionLeft:Textbox({
                     Name = "Textbox",
                     Flag = "Textbox",
-                    Placeholder = "Placeholder",
-                    Default = "Input",
+                    Placeholder = "...",
+                    Numeric = false,
+                    Finished = false,
+                    Default = "yo gurt",
+                    Callback = function(Value)
+                        print(Value)
+                    end
+                })
+
+                SectionLeft:Searchbox({
+                    Name = "Searchbox",
+                    Flag = "Searchbox",
+                    Multi = false,
+                    Items = {"First", "Second", "Third", "Fourth", "Fifth", "Sixth"},
+                    Default = "First",
+                    Callback = function(Value)
+                        print(Value)
+                    end
+                })
+            end
+
+            do -- Section right
+                SectionRight:Toggle({
+                    Name = "Toggle",
+                    Flag = "Toggle2",
+                    Default = false,
                     Callback = function(Value)
                         print(Value)
                     end
@@ -153,108 +244,19 @@ do -- Example
         end
     end
 
-    do -- Sixth tab (settings)
-        local SettingsSubtab = Pages["Six"]:SubPage({Name = "Settings"}) do 
+    do -- Combat 2
+        local SubPages = {
+            ["Weapon"] = Pages["Combat2"]:SubPage({Name = "Weapon"}),
+            ["Silent Aim"] = Pages["Combat2"]:SubPage({Name = "Silent Aim"}),
+            ["Visuals"] = Pages["Combat2"]:SubPage({Name = "Visuals"}),
+            ["Misc"] = Pages["Combat2"]:SubPage({Name = "Misc"})
+        }
 
-        local ThemingSection = SettingsSubtab:Section({Name = "Theming", Side = "Right"}) do 
-                for Index, Value in Library.Theme do
-                    ThemingSection:Label(Index, "Left"):Colorpicker({
-                        Name = Index,
-                        Flag = "Theme" .. Index,
-                        Default = Value,
-                        Callback = function(Value)
-                            Library.Theme[Index] = Value
-                            Library:ChangeTheme(Index, Value)
-                        end
-                    })
-                end
-            end
-        end
-
-        local ConfigsSection = SettingsSubtab:Section({Name = "Configs", Side = "Left"}) do 
-            local ConfigName
-            local ConfigSelected 
-
-            local ConfigsDropdown = ConfigsSection:Dropdown({
-                Name = "Configs", 
-                Flag = "ConfigsList", 
-                Items = { }, 
-                Multi = false,
-                MaxSize = 85,
-                Callback = function(Value)
-                    ConfigSelected = Value
-                end
-            })
-
-            ConfigsSection:Textbox({
-                Name = "Config Name",
-                Default = "",
-                Flag = "ConfigName",
-                Placeholder = "...",
-                Callback = function(Value)
-                    ConfigName = Value
-                end
-            })
-
-            ConfigsSection:Button({
-                Name = "Load Config",
-                Callback = function()
-                    if ConfigSelected then
-                        Library:LoadConfig(readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
-
-                        Library:Thread(function()
-                            task.wait(0.1)
-
-                            for Index, Value in Library.Theme do 
-                                Library.Theme[Index] = Library.Flags["Theme"..Index].Color
-                                Library:ChangeTheme(Index, Library.Flags["Theme"..Index].Color)
-                            end    
-                        end)
-
-                        Library:Notification("Success", "Loaded config " .. ConfigSelected, 5)
-                    else
-                        return
-                    end
-                end
-            }):SubButton({
-                Name = "Save Config",
-                Callback = function()
-                    if ConfigName then
-                        Library:SaveConfig(ConfigSelected)
-                    else
-                        return
-                    end
-                end
-            })
-
-            ConfigsSection:Button({
-                Name = "Create Config",
-                Callback = function()
-                    if not isfile(Library.Folders.Configs .. "/" .. ConfigName .. ".json") then
-                        writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
-
-                        Library:RefreshConfigsList(ConfigsDropdown)
-                    else
-                        Library:Notification("Error", "Config already exists", 3)
-                        return
-                    end
-                end
-            }):SubButton({
-                Name = "Delete Config",
-                Callback = function()
-                    if ConfigSelected then
-                        Library:DeleteConfig(ConfigSelected)
-
-                        Library:RefreshConfigsList(ConfigsDropdown)
-                    else
-                        return
-                    end
-                end
-            })
-
-            Library:RefreshConfigsList(ConfigsDropdown)
+        do -- Ragebot
+            local SectionLeft = SubPages["Weapon"]:Section({Name = "General"})
+            local SectionRight = SubPages["Weapon"]:Section({Name = "General"})
         end
     end
 end
 
-Library:Notification("Notification test", "Test", 5)
+Library:Notification("Welcome back, Loaded in "..string.format("%.4f", os.clock() - LoadingTick).." seconds", 5, Library.Theme.Accent)
