@@ -197,8 +197,8 @@ local Library do
 
     local Themes = {
         ["Preset"] = {
-            ["Accent"] = FromRGB(166, 147, 243),
-            ["Dark Accent"] = FromRGB(110, 97, 161)
+            ["Accent"] = FromRGB(219, 219, 219),
+            ["Dark Accent"] = FromRGB(192, 192, 192)
         }
     }
 
