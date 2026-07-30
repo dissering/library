@@ -4464,7 +4464,9 @@ do --// UI Source
                 function Slider:Set(Value)
                     Slider.Value = Library:Round(math.clamp(Value, Slider.Min, Slider.Max), Slider.Decimals)
 
-                    Items["Accent"]:Tween({Size = UDim2.new((Slider.Value - Slider.Min) / (Slider.Max - Slider.Min), 0, 1, 0)}, TweenInfo.new(Library.Animation.Time, Enum.EasingStyle.Quart, Enum.EasingDirection.Out))
+                    local range = Slider.Max - Slider.Min
+                    local pct = range > 0 and (Slider.Value - Slider.Min) / range or 0
+                    Items["Accent"]:Tween({Size = UDim2.new(pct, 0, 1, 0)}, TweenInfo.new(Library.Animation.Time, Enum.EasingStyle.Quart, Enum.EasingDirection.Out))
                     Items["Value"].Instance.Text = string.format("%s%s", Slider.Value, Slider.Suffix)
 
                     Flags[Slider.Flag] = Slider.Value
@@ -4476,9 +4478,12 @@ do --// UI Source
                 end
 
                 function Slider:GetSize(Input)
-                    local SizeX = (Input.Position.X - Items["RealSlider"].Instance.AbsolutePosition.X) / Items["RealSlider"].Instance.AbsoluteSize.X
+                    local absPos = Items["RealSlider"].Instance.AbsolutePosition.X
+                    local absSize = Items["RealSlider"].Instance.AbsoluteSize.X
+                    if absSize <= 0 then return Slider.Min end
+                    local SizeX = (Input.Position.X - absPos) / absSize
+                    SizeX = math.clamp(SizeX, 0, 1)
                     local Value = ((Slider.Max - Slider.Min) * SizeX) + Slider.Min
-
                     return Value
                 end
 
@@ -4486,36 +4491,73 @@ do --// UI Source
                     Items["Text"].Instance.Text = tostring(Text)
                 end
 
-                local InputChanged
+                -- Right-click edit: create a TextBox overlay for direct value entry
+                local editBox = nil
+                local function startEdit()
+                    if editBox then editBox:Destroy() end
+                    local screenGui = Items["Slider"].Instance:FindFirstAncestorOfClass("ScreenGui")
+                    if not screenGui then return end
+                    editBox = Instance.new("TextBox")
+                    editBox.Name = "\0"
+                    editBox.FontFace = Library.Font
+                    editBox.TextSize = Library.FontSize
+                    editBox.Text = tostring(Slider.Value)
+                    editBox.TextColor3 = Library.Theme["Text"]
+                    editBox.PlaceholderColor3 = Library.Theme["Inactive Text"]
+                    editBox.PlaceholderText = tostring(Slider.Value)
+                    editBox.BackgroundColor3 = Library.Theme["Inline"]
+                    editBox.BorderSizePixel = 0
+                    editBox.Size = UDim2.new(0, 80, 0, 18)
+                    editBox.Position = UDim2.new(0, Items["Slider"].Instance.AbsolutePosition.X + Items["Slider"].Instance.AbsoluteSize.X - 84, 0, Items["Slider"].Instance.AbsolutePosition.Y + 1)
+                    editBox.AutomaticSize = Enum.AutomaticSize.None
+                    editBox.ClearTextOnFocus = false
+                    editBox.Parent = screenGui
+                    editBox:CaptureFocus()
+                    editBox.CursorPosition = 1
+                    local stroke = Instance.new("UIStroke")
+                    stroke.Color = Library.Theme["Outline 1"]
+                    stroke.Parent = editBox
+                    local lostFocus
+                    lostFocus = editBox:GetPropertyChangedSignal("Text"):Connect(function()
+                        local v = tonumber(editBox.Text)
+                        if v then
+                            Slider:Set(v)
+                        end
+                    end)
+                    editBox.FocusLost:Connect(function(enterPressed)
+                        if enterPressed then
+                            local v = tonumber(editBox.Text)
+                            if v then Slider:Set(v) end
+                        end
+                        if lostFocus then lostFocus:Disconnect() end
+                        editBox:Destroy()
+                        editBox = nil
+                    end)
+                end
 
+                -- Left-click: drag to set value. Right-click: edit value directly.
                 Items["RealSlider"]:Connect("InputBegan", function(Input)
                     if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
                         Slider.Sliding = true
-
                         local Value = Slider:GetSize(Input)
-
                         Slider:Set(Value)
-
-                        if InputChanged then
-                            return
-                        end
-
-                        InputChanged = Input.Changed:Connect(function()
-                            if Input.UserInputState == Enum.UserInputState.End then
-                                Slider.Sliding = false
-
-                                InputChanged:Disconnect()
-                                InputChanged = nil
-                            end
-                        end)
+                    elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                        startEdit()
                     end
                 end)
 
+                -- Global mouse up to stop sliding (more reliable than Input.Changed)
+                Library:Connect(UserInputService.InputEnded, function(Input)
+                    if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                        Slider.Sliding = false
+                    end
+                end)
+
+                -- Global mouse move to update value while sliding
                 Library:Connect(UserInputService.InputChanged, function(Input)
                     if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
                         if Slider.Sliding then
                             local Value = Slider:GetSize(Input)
-
                             Slider:Set(Value)
                         end
                     end
