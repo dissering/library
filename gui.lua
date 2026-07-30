@@ -5289,6 +5289,26 @@ do --// UI Source
                         Parent = Items["Label"].Instance
                     })
 
+                    Items["SubElements"] = Library:Create("Frame", {
+                        Name = "\0",
+                        Parent = Items["Label"].Instance,
+                        AnchorPoint = Vector2.new(1, 0),
+                        BackgroundTransparency = 1,
+                        Position = UDim2.new(1, -1, 0, 0),
+                        Size = UDim2.new(0, 0, 1, 0),
+                        BorderSizePixel = 0
+                    })
+
+                    Library:Create("UIListLayout", {
+                        Name = "\0",
+                        Parent = Items["SubElements"].Instance,
+                        VerticalAlignment = Enum.VerticalAlignment.Center,
+                        FillDirection = Enum.FillDirection.Horizontal,
+                        HorizontalAlignment = Enum.HorizontalAlignment.Right,
+                        Padding = UDim.new(0, 6),
+                        SortOrder = Enum.SortOrder.LayoutOrder
+                    })
+
                     Label.Items = Items
                 end
 
@@ -5298,6 +5318,62 @@ do --// UI Source
 
                 function Label:SetVisibility(Bool)
                     Items["Label"].Instance.Visible = Bool
+                end
+
+                function Label:Colorpicker(Data)
+                    Data = Data or { }
+
+                    local Colorpicker = {
+                        Flag = Data.Flag or Data.flag or (Data.Name or Data.name or Label.Name),
+                        Default = Data.Default or Data.default or Color3.fromRGB(255, 255, 255),
+                        Callback = Data.Callback or Data.callback or function() end,
+                        Alpha = Data.Alpha or Data.alpha or 0,
+
+                        Window = Label.Window,
+                        Page = Label.Page,
+                        Section = Label.Section,
+                    }
+
+                    local NewColorpicker, ColorpickerItems = Library:CreateColorpicker({
+                        Parent = Items["SubElements"],
+                        Page = Colorpicker.Page,
+                        Section = Colorpicker.Section,
+                        Flag = Colorpicker.Flag,
+                        Default = Colorpicker.Default,
+                        Callback = Colorpicker.Callback,
+                        Alpha = Colorpicker.Alpha
+                    })
+
+                    return NewColorpicker
+                end
+
+                function Label:Keybind(Data)
+                    Data = Data or { }
+
+                    local Keybind = {
+                        Name = Data.Name or Data.name or Label.Name,
+                        Flag = Data.Flag or Data.flag or (Data.Name or Data.name or Label.Name),
+                        Default = Data.Default or Data.default or Enum.KeyCode.E,
+                        Callback = Data.Callback or Data.callback or function() end,
+                        Mode = Data.Mode or Data.mode or "Toggle",
+
+                        Window = Label.Window,
+                        Page = Label.Page,
+                        Section = Label.Section,
+                    }
+
+                    local NewKeybind, KeybindItems = Library:CreateKeybind({
+                        Parent = Items["SubElements"],
+                        Name = Keybind.Name,
+                        Page = Keybind.Page,
+                        Section = Keybind.Section,
+                        Flag = Keybind.Flag,
+                        Default = Keybind.Default,
+                        Mode = Keybind.Mode,
+                        Callback = Keybind.Callback
+                    })
+
+                    return NewKeybind
                 end
 
                 Items["Label"].Instance.Text = Label.Name
@@ -5324,7 +5400,8 @@ do --// UI Source
 
                         ConfigsSection:Textbox({
                             Flag = "config_name",
-                            Placeholder = "",
+                            Placeholder = "config name",
+                            Finished = true,
                             Callback = function(Value)
                                 ConfigName = Value
                             end
@@ -5429,7 +5506,7 @@ do --// UI Source
                             end
                         })
 
-                        OtherSection:Label({Name = "ui bind"}):Keybind({Flag = "uibind", Mode = "Toggle", Default = Enum.KeyCode.RightShift, Callback = function(Value)
+                        OtherSection:Label({Name = "ui bind"}):Keybind({Flag = "uibind", Mode = "Toggle", Default = Enum.KeyCode.RightControl, Callback = function(Value)
                             Library.MenuKeybind = Flags["uibind"].Key
                         end})
 
