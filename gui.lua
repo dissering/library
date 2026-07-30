@@ -162,17 +162,17 @@ do --// UI Source
 
         local Themes = {
             ["Preset"] = {
-                ["Background"] = Color3.fromRGB(12, 15, 20),
-                ["Inline"] = Color3.fromRGB(11, 14, 19),
-                ["Content"] = Color3.fromRGB(10, 13, 18),
-                ["Text"] = Color3.fromRGB(210, 220, 235),
-                ["Outline 1"] = Color3.fromRGB(28, 36, 48),
-                ["Outline 2"] = Color3.fromRGB(24, 31, 42),
-                ["Outline 3"] = Color3.fromRGB(14, 18, 25),
-                ["Outline 4"] = Color3.fromRGB(8, 10, 15),
-                ["Inactive Text"] = Color3.fromRGB(120, 135, 155),
-                ["Accent"] = Color3.fromRGB(70, 140, 255),
-                ["Hovered Element"] = Color3.fromRGB(32, 45, 65),
+                ["Background"] = Color3.fromRGB(23, 23, 23),
+                ["Inline"] = Color3.fromRGB(22, 22, 22),
+                ["Content"] = Color3.fromRGB(21, 21, 21),
+                ["Text"] = Color3.fromRGB(200, 200, 200),
+                ["Outline 1"] = Color3.fromRGB(35, 35, 35),
+                ["Outline 2"] = Color3.fromRGB(30, 30, 30),
+                ["Outline 3"] = Color3.fromRGB(15, 15, 15),
+                ["Outline 4"] = Color3.fromRGB(10, 10, 10),
+                ["Inactive Text"] = Color3.fromRGB(135, 135, 135),
+                ["Accent"] = Color3.fromRGB(210, 210, 215),
+                ["Hovered Element"] = Color3.fromRGB(35, 35, 35),
             }
         }
 
