@@ -5510,6 +5510,17 @@ do --// UI Source
                             Library.MenuKeybind = Flags["uibind"].Key
                         end})
 
+                        OtherSection:Toggle({
+                            Name = "show hotkey list",
+                            Flag = "showhotkeys",
+                            Default = true,
+                            Callback = function(Value)
+                                if Library.KeyList then
+                                    Library.KeyList:SetVisibility(Value)
+                                end
+                            end
+                        })
+
                         OtherSection:Dropdown({
                             Name = "animation style",
                             Items = {"Linear", "Quad", "Quart", "Back", "Bounce", "Circular", "Cubic", "Elastic", "Exponential", "Sine", "Quint"},
