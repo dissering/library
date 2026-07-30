@@ -1,5 +1,6 @@
 -- drawing.lua - Fork of wows.lua with gradient + outline + image support
 -- Original: norbyv1/Lua-Drawing-Library (fork of solara's drawing)
+-- Outline: black, +1 thickness on all drawing types
 
 do
 	local CoreGui = game:GetService("CoreGui")
@@ -74,8 +75,9 @@ do
 	getgenv().cleardrawcache = getgenv().Drawing.clear
 
 	-- Helper: apply or update gradient on a frame
+	-- Supports: ColorStart+ColorEnd (2-color), ColorSequence (multi-color)
 	local function ApplyGradient(frame, gradData)
-		if not gradData then
+		if not gradData or (not gradData.ColorStart and not gradData.ColorSequence) then
 			local existing = frame:FindFirstChildOfClass("UIGradient")
 			if existing then existing:Destroy() end
 			return
@@ -85,7 +87,9 @@ do
 			grad = Instance.new("UIGradient")
 			grad.Parent = frame
 		end
-		if gradData.ColorStart and gradData.ColorEnd then
+		if gradData.ColorSequence then
+			grad.Color = gradData.ColorSequence
+		elseif gradData.ColorStart and gradData.ColorEnd then
 			grad.Color = ColorSequence.new(gradData.ColorStart, gradData.ColorEnd)
 		end
 		if gradData.Rotation then
@@ -94,6 +98,36 @@ do
 		if gradData.Offset then
 			grad.Offset = gradData.Offset
 		end
+	end
+
+	-- Helper: load image from URL or raw bytes
+	local imageCache = {}
+	local function LoadImage(urlOrData)
+		if not urlOrData or urlOrData == "" then return nil end
+		-- check cache first (by URL)
+		if imageCache[urlOrData] then return imageCache[urlOrData] end
+		local filename = ".Drawing/CustomAssets/" .. RandomString(8) .. ".png"
+		local success = pcall(function()
+			local data
+			if type(urlOrData) == "string" and (urlOrData:sub(1, 4) == "http" or urlOrData:sub(1, 5) == "https") then
+				data = game:HttpGet(urlOrData)
+			else
+				data = urlOrData
+			end
+			-- make sure folder exists
+			if not isfolder(".Drawing/CustomAssets") then
+				makefolder(".Drawing/CustomAssets")
+			end
+			writefile(filename, data)
+		end)
+		if success then
+			local asset = getcustomasset(filename)
+			if type(urlOrData) == "string" and urlOrData:sub(1, 4) == "http" then
+				imageCache[urlOrData] = asset
+			end
+			return asset
+		end
+		return nil
 	end
 
 	getgenv().Drawing.new = newcclosure(function(Type)
@@ -145,7 +179,7 @@ do
 				if Obj.Outline then
 					OutlineFrame.Position = LineFrame.Position
 					OutlineFrame.Rotation = Theta
-					OutlineFrame.Size = UDim2.fromOffset(Distance, Obj.Thickness + 2)
+					OutlineFrame.Size = UDim2.fromOffset(Distance, Obj.Thickness + 1)
 					OutlineFrame.Visible = Obj.Visible
 				else
 					OutlineFrame.Visible = false
@@ -287,6 +321,7 @@ do
 				GradientStart = nil,
 				GradientEnd = nil,
 				GradientRotation = 0,
+				GradientColorSequence = nil,
 			})
 
 			local circleFrame = Instance.new("Frame")
@@ -332,6 +367,7 @@ do
 					elseif Key == "Thickness" then
 						Obj.Thickness = math.clamp(Value, 0.6, 1e4)
 						uiStroke.Thickness = Obj.Thickness
+						if Obj.Outline then outlineStroke.Thickness = Obj.Thickness + 1 end
 					elseif Key == "Filled" then
 						Obj.Filled = Value
 						circleFrame.BackgroundTransparency = (Value and ConvertTransparency(Obj.Transparency)) or 1
@@ -353,25 +389,35 @@ do
 					elseif Key == "Outline" then
 						Obj.Outline = Value
 						outlineStroke.Enabled = Value
-						outlineStroke.Thickness = Obj.Thickness + 2
+						outlineStroke.Thickness = Obj.Thickness + 1
 					elseif Key == "OutlineColor" then
 						Obj.OutlineColor = Value; outlineStroke.Color = Value
 					elseif Key == "GradientStart" then
 						Obj.GradientStart = Value
 						ApplyGradient(circleFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					elseif Key == "GradientEnd" then
 						Obj.GradientEnd = Value
 						ApplyGradient(circleFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
+							Rotation = Obj.GradientRotation
+						})
+					elseif Key == "GradientColorSequence" then
+						Obj.GradientColorSequence = Value
+						ApplyGradient(circleFrame, {
+							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					elseif Key == "GradientRotation" then
 						Obj.GradientRotation = Value
 						ApplyGradient(circleFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					end
@@ -396,6 +442,7 @@ do
 				GradientStart = nil,
 				GradientEnd = nil,
 				GradientRotation = 0,
+				GradientColorSequence = nil,
 			})
 
 			local squareFrame = Instance.new("Frame")
@@ -438,7 +485,7 @@ do
 					elseif Key == "Thickness" then
 						Obj.Thickness = math.clamp(Value, 0.6, 1e4)
 						uiStroke.Thickness = Obj.Thickness
-						if Obj.Outline then outlineStroke.Thickness = Obj.Thickness + 2 end
+						if Obj.Outline then outlineStroke.Thickness = Obj.Thickness + 1 end
 					elseif Key == "Filled" then
 						Obj.Filled = Value
 						squareFrame.BackgroundTransparency = (Value and ConvertTransparency(Obj.Transparency)) or 1
@@ -458,25 +505,35 @@ do
 					elseif Key == "Outline" then
 						Obj.Outline = Value
 						outlineStroke.Enabled = Value
-						outlineStroke.Thickness = Obj.Thickness + 2
+						outlineStroke.Thickness = Obj.Thickness + 1
 					elseif Key == "OutlineColor" then
 						Obj.OutlineColor = Value; outlineStroke.Color = Value
 					elseif Key == "GradientStart" then
 						Obj.GradientStart = Value
 						ApplyGradient(squareFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					elseif Key == "GradientEnd" then
 						Obj.GradientEnd = Value
 						ApplyGradient(squareFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
+							Rotation = Obj.GradientRotation
+						})
+					elseif Key == "GradientColorSequence" then
+						Obj.GradientColorSequence = Value
+						ApplyGradient(squareFrame, {
+							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					elseif Key == "GradientRotation" then
 						Obj.GradientRotation = Value
 						ApplyGradient(squareFrame, {
 							ColorStart = Obj.GradientStart, ColorEnd = Obj.GradientEnd,
+							ColorSequence = Obj.GradientColorSequence,
 							Rotation = Obj.GradientRotation
 						})
 					end
@@ -512,24 +569,10 @@ do
 					if Obj.__OBJECT_EXISTS == false then return end
 					if Obj[Key] == nil then return end
 					if Key == "Data" then
-						-- support both raw bytes and asset URLs
-						if type(Value) == "string" then
-							if Value:sub(1, 4) == "http" then
-								-- it's a URL, fetch and cache
-								local filename = ".Drawing/CustomAssets/" .. RandomString(8) .. ".png"
-								pcall(function()
-									local data = game:HttpGet(Value)
-									writefile(filename, data)
-									imageLabel.Image = getcustomasset(filename)
-								end)
-							else
-								-- raw bytes
-								local filename = ".Drawing/CustomAssets/" .. RandomString(8) .. ".png"
-								pcall(function()
-									writefile(filename, Value)
-									imageLabel.Image = getcustomasset(filename)
-								end)
-							end
+						Obj.Data = Value
+						local asset = LoadImage(Value)
+						if asset then
+							imageLabel.Image = asset
 						end
 					elseif Key == "Size" then
 						Obj.Size = Value
