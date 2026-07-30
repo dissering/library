@@ -4349,6 +4349,10 @@ do --// UI Source
                     Items["Button"].Instance.Visible = Bool
                 end
 
+                function Button:Destroy()
+                    pcall(function() Items["Button"].Instance:Destroy() end)
+                end
+
                 function Button:SetText(Text)
                     Items["Text"].Instance.Text = tostring(Text)
                 end
@@ -5063,6 +5067,10 @@ do --// UI Source
                     Items["Label"].Instance.Visible = Bool
                 end
 
+                function Label:Destroy()
+                    pcall(function() Items["Label"].Instance:Destroy() end)
+                end
+
                 function Label:SetText(Text)
                     Items["Text"].Instance.Text = tostring(Text)
                 end
@@ -5247,9 +5255,7 @@ do --// UI Source
 
                 if Textbox.Finished then
                     Items["Input"]:Connect("FocusLost", function(PressedEnterQuestionMark)
-                        if PressedEnterQuestionMark then
-                            Textbox:Set(Items["Input"].Instance.Text)
-                        end
+                        Textbox:Set(Items["Input"].Instance.Text)
                     end)
                 else
                     Library:Connect(Items["Input"].Instance:GetPropertyChangedSignal("Text"), function()
@@ -5341,6 +5347,10 @@ do --// UI Source
 
                 function Label:SetVisibility(Bool)
                     Items["Label"].Instance.Visible = Bool
+                end
+
+                function Label:Destroy()
+                    pcall(function() Items["Label"].Instance:Destroy() end)
                 end
 
                 function Label:Colorpicker(Data)
