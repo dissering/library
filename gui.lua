@@ -1518,17 +1518,31 @@ do --// UI Source
                 local Update = function()
                     if KeybindObject then
                         KeybindObject:Set(Data.Name, Keybind.Mode)
-                        KeybindObject:SetStatus(Keybind.Toggled)
+
+                        -- if attached to a toggle and toggle is off, show as off
+                        local effectiveToggled = Keybind.Toggled
+                        if Data.Toggle and not Data.Toggle.Value then
+                            effectiveToggled = false
+                        end
+
+                        KeybindObject:SetStatus(effectiveToggled)
 
                         if Keybind.Mode == "Hold" then
-                            KeybindObject:SetMode(Keybind.Toggled and "holding" or "off")
+                            KeybindObject:SetMode(effectiveToggled and "holding" or "off")
                         elseif Keybind.Mode == "Always" then
-                            KeybindObject:SetMode("always on")
+                            if Data.Toggle and not Data.Toggle.Value then
+                                KeybindObject:SetMode("off")
+                            else
+                                KeybindObject:SetMode("always on")
+                            end
                         else
-                            KeybindObject:SetMode(Keybind.Toggled and "toggled" or "off")
+                            KeybindObject:SetMode(effectiveToggled and "toggled" or "off")
                         end
                     end
                 end
+
+                -- expose Update so attached toggle can sync the keybind list
+                Keybind.Update = Update
 
                 function Keybind:SetMode()
                     Flags[Keybind.Flag] = {
@@ -4061,6 +4075,7 @@ do --// UI Source
                     end)
 
                     Toggle.Items = Items
+                    Toggle.Keybinds = {}
                 end
 
                 function Toggle:Set(Bool)
@@ -4082,6 +4097,11 @@ do --// UI Source
 
                     Flags[Toggle.Flag] = Bool
                     Library:SafeCall(Toggle.Callback, Bool)
+
+                    -- update attached keybinds so the keybind list stays in sync
+                    for _, kb in ipairs(Toggle.Keybinds) do
+                        if kb.Update then kb.Update() end
+                    end
                 end
 
                 function Toggle:SetVisibility(Bool)
@@ -4145,6 +4165,9 @@ do --// UI Source
                         Mode = Keybind.Mode,
                         Callback = Keybind.Callback
                     })
+
+                    -- register keybind so toggle can update the keybind list when toggled
+                    table.insert(Toggle.Keybinds, NewKeybind)
 
                     return NewKeybind
                 end
