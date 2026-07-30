@@ -4532,7 +4532,7 @@ do --// UI Source
                 end
 
                 -- Filter non-numeric input while editing
-                Items["Value"]:Connect("TextChanged", function()
+                Items["Value"].Instance:GetPropertyChangedSignal("Text"):Connect(function()
                     if not editing then return end
                     local txt = Items["Value"].Instance.Text
                     -- Allow digits, one decimal point, and leading minus
@@ -4556,7 +4556,7 @@ do --// UI Source
                 end)
 
                 -- Apply on focus lost (clicking away or pressing Enter)
-                Items["Value"]:Connect("FocusLost", function(enterPressed)
+                Items["Value"].Instance.FocusLost:Connect(function(enterPressed)
                     stopEdit(enterPressed or true)
                 end)
 
