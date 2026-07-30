@@ -627,8 +627,12 @@ do --// UI Source
         end
 
         Library.Round = function(Self, Number, Float)
-            local Multiplier = 1 / (Float or 1)
-            return math.floor(Number * Multiplier) / Multiplier
+            Float = Float or 0
+            if Float <= 0 then
+                return math.floor(Number + 0.5)
+            end
+            local Multiplier = 1 / Float
+            return math.floor(Number * Multiplier + 0.5) / Multiplier
         end
 
         Library.GetConfig = function(Self)
@@ -4497,6 +4501,8 @@ do --// UI Source
                     if editBox then editBox:Destroy() end
                     local screenGui = Items["Slider"].Instance:FindFirstAncestorOfClass("ScreenGui")
                     if not screenGui then return end
+                    local sliderAbsPos = Items["Slider"].Instance.AbsolutePosition
+                    local sliderAbsSize = Items["Slider"].Instance.AbsoluteSize
                     editBox = Instance.new("TextBox")
                     editBox.Name = "\0"
                     editBox.FontFace = Library.Font
@@ -4507,10 +4513,13 @@ do --// UI Source
                     editBox.PlaceholderText = tostring(Slider.Value)
                     editBox.BackgroundColor3 = Library.Theme["Inline"]
                     editBox.BorderSizePixel = 0
-                    editBox.Size = UDim2.new(0, 80, 0, 18)
-                    editBox.Position = UDim2.new(0, Items["Slider"].Instance.AbsolutePosition.X + Items["Slider"].Instance.AbsoluteSize.X - 84, 0, Items["Slider"].Instance.AbsolutePosition.Y + 1)
+                    -- Position the edit box directly on top of the slider bar
+                    editBox.Size = UDim2.new(0, sliderAbsSize.X - 4, 0, 18)
+                    editBox.Position = UDim2.new(0, sliderAbsPos.X + 2, 0, sliderAbsPos.Y + 1)
                     editBox.AutomaticSize = Enum.AutomaticSize.None
                     editBox.ClearTextOnFocus = false
+                    editBox.TextXAlignment = Enum.TextXAlignment.Center
+                    editBox.ZIndex = 100
                     editBox.Parent = screenGui
                     editBox:CaptureFocus()
                     editBox.CursorPosition = 1
