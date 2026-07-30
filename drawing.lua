@@ -100,31 +100,57 @@ do
 		end
 	end
 
-	-- Helper: load image from URL or raw bytes
+	-- Helper: load image from URL, raw bytes, or asset path
 	local imageCache = {}
 	local function LoadImage(urlOrData)
 		if not urlOrData or urlOrData == "" then return nil end
-		-- check cache first (by URL)
+		-- check cache first
 		if imageCache[urlOrData] then return imageCache[urlOrData] end
+		-- if it's already an asset path (rbxasset://, rbxassetid://), use directly
+		if type(urlOrData) == "string" and (urlOrData:sub(1, 10) == "rbxasset://" or urlOrData:sub(1, 12) == "rbxassetid://") then
+			imageCache[urlOrData] = urlOrData
+			return urlOrData
+		end
+		-- if it's a local file path that exists, use getcustomasset directly
+		if type(urlOrData) == "string" and isfile and isfile(urlOrData) then
+			local asset = nil
+			pcall(function() asset = getcustomasset(urlOrData) end)
+			if asset then
+				imageCache[urlOrData] = asset
+				return asset
+			end
+		end
+		-- if it's a URL, download and cache
+		if type(urlOrData) == "string" and (urlOrData:sub(1, 4) == "http" or urlOrData:sub(1, 5) == "https") then
+			local filename = ".Drawing/CustomAssets/" .. RandomString(8) .. ".png"
+			local success = pcall(function()
+				local data = game:HttpGet(urlOrData)
+				if not isfolder(".Drawing/CustomAssets") then
+					makefolder(".Drawing/CustomAssets")
+				end
+				writefile(filename, data)
+			end)
+			if success then
+				local asset = nil
+				pcall(function() asset = getcustomasset(filename) end)
+				if asset then
+					imageCache[urlOrData] = asset
+					return asset
+				end
+			end
+			return nil
+		end
+		-- otherwise treat as raw bytes
 		local filename = ".Drawing/CustomAssets/" .. RandomString(8) .. ".png"
 		local success = pcall(function()
-			local data
-			if type(urlOrData) == "string" and (urlOrData:sub(1, 4) == "http" or urlOrData:sub(1, 5) == "https") then
-				data = game:HttpGet(urlOrData)
-			else
-				data = urlOrData
-			end
-			-- make sure folder exists
 			if not isfolder(".Drawing/CustomAssets") then
 				makefolder(".Drawing/CustomAssets")
 			end
-			writefile(filename, data)
+			writefile(filename, urlOrData)
 		end)
 		if success then
-			local asset = getcustomasset(filename)
-			if type(urlOrData) == "string" and urlOrData:sub(1, 4) == "http" then
-				imageCache[urlOrData] = asset
-			end
+			local asset = nil
+			pcall(function() asset = getcustomasset(filename) end)
 			return asset
 		end
 		return nil
