@@ -4417,7 +4417,7 @@ do --// UI Source
                         BackgroundColor3 = Library.Theme["Accent"]
                     }):AddToTheme({BackgroundColor3 = 'Accent'})
 
-                    Items["Value"] = Library:Create("TextLabel", {
+                    Items["Value"] = Library:Create("TextBox", {
                         Name = "\0",
                         FontFace = Library.Font,
                         TextSize = Library.FontSize,
@@ -4429,7 +4429,11 @@ do --// UI Source
                         BackgroundTransparency = 1,
                         Position = UDim2.new(1, 10, 0.5, -1),
                         BorderSizePixel = 0,
-                        AutomaticSize = Enum.AutomaticSize.X
+                        AutomaticSize = Enum.AutomaticSize.X,
+                        ClearTextOnFocus = false,
+                        Active = false,
+                        Selectable = false,
+                        TextEditable = false,
                     }):AddToTheme({TextColor3 = 'Text'})
 
                     Library:Create("UIStroke", {
@@ -4495,62 +4499,82 @@ do --// UI Source
                     Items["Text"].Instance.Text = tostring(Text)
                 end
 
-                -- Right-click edit: create a TextBox overlay for direct value entry
-                local editBox = nil
+                -- Right-click: enable in-place editing on the value TextBox
+                local editing = false
                 local function startEdit()
-                    if editBox then editBox:Destroy() end
-                    local screenGui = Items["Slider"].Instance:FindFirstAncestorOfClass("ScreenGui")
-                    if not screenGui then return end
-                    local sliderAbsPos = Items["Slider"].Instance.AbsolutePosition
-                    local sliderAbsSize = Items["Slider"].Instance.AbsoluteSize
-                    editBox = Instance.new("TextBox")
-                    editBox.Name = "\0"
-                    editBox.FontFace = Library.Font
-                    editBox.TextSize = Library.FontSize
-                    editBox.Text = tostring(Slider.Value)
-                    editBox.TextColor3 = Library.Theme["Text"]
-                    editBox.PlaceholderColor3 = Library.Theme["Inactive Text"]
-                    editBox.PlaceholderText = tostring(Slider.Value)
-                    editBox.BackgroundColor3 = Library.Theme["Inline"]
-                    editBox.BorderSizePixel = 0
-                    -- Position the edit box directly on top of the slider bar
-                    editBox.Size = UDim2.new(0, sliderAbsSize.X - 4, 0, 18)
-                    editBox.Position = UDim2.new(0, sliderAbsPos.X + 2, 0, sliderAbsPos.Y + 1)
-                    editBox.AutomaticSize = Enum.AutomaticSize.None
-                    editBox.ClearTextOnFocus = false
-                    editBox.TextXAlignment = Enum.TextXAlignment.Center
-                    editBox.ZIndex = 100
-                    editBox.Parent = screenGui
-                    editBox:CaptureFocus()
-                    editBox.CursorPosition = 1
-                    local stroke = Instance.new("UIStroke")
-                    stroke.Color = Library.Theme["Outline 1"]
-                    stroke.Parent = editBox
-                    local lostFocus
-                    lostFocus = editBox:GetPropertyChangedSignal("Text"):Connect(function()
-                        local v = tonumber(editBox.Text)
-                        if v then
-                            Slider:Set(v)
-                        end
-                    end)
-                    editBox.FocusLost:Connect(function(enterPressed)
-                        if enterPressed then
-                            local v = tonumber(editBox.Text)
-                            if v then Slider:Set(v) end
-                        end
-                        if lostFocus then lostFocus:Disconnect() end
-                        editBox:Destroy()
-                        editBox = nil
-                    end)
+                    if editing then return end
+                    editing = true
+                    local valBox = Items["Value"].Instance
+                    -- Make it editable
+                    valBox.Active = true
+                    valBox.Selectable = true
+                    valBox.TextEditable = true
+                    valBox.Text = tostring(Slider.Value)
+                    valBox:CaptureFocus()
+                    valBox.CursorPosition = 0
+                    valBox.SelectionStart = 0
                 end
 
-                -- Left-click: drag to set value. Right-click: edit value directly.
+                local function stopEdit(apply)
+                    if not editing then return end
+                    editing = false
+                    local valBox = Items["Value"].Instance
+                    if apply then
+                        local v = tonumber(valBox.Text)
+                        if v then Slider:Set(v) end
+                    end
+                    -- Restore label appearance
+                    valBox.Active = false
+                    valBox.Selectable = false
+                    valBox.TextEditable = false
+                    valBox.Text = string.format("%s%s", Slider.Value, Slider.Suffix)
+                    valBox:ReleaseFocus(true)
+                end
+
+                -- Filter non-numeric input while editing
+                Items["Value"]:Connect("TextChanged", function()
+                    if not editing then return end
+                    local txt = Items["Value"].Instance.Text
+                    -- Allow digits, one decimal point, and leading minus
+                    local cleaned = txt:gsub("[^0-9.%-]", "")
+                    -- Only keep first decimal point
+                    local firstDec = cleaned:find("%.")
+                    if firstDec then
+                        cleaned = cleaned:sub(1, firstDec) .. cleaned:sub(firstDec + 1):gsub("%.", "")
+                    end
+                    -- Only keep leading minus
+                    if cleaned:sub(1, 1) == "-" then
+                        cleaned = "-" .. cleaned:sub(2):gsub("%-", "")
+                    else
+                        cleaned = cleaned:gsub("%-", "")
+                    end
+                    if txt ~= cleaned then
+                        local cursor = Items["Value"].Instance.CursorPosition
+                        Items["Value"].Instance.Text = cleaned
+                        pcall(function() Items["Value"].Instance.CursorPosition = cursor end)
+                    end
+                end)
+
+                -- Apply on focus lost (clicking away or pressing Enter)
+                Items["Value"]:Connect("FocusLost", function(enterPressed)
+                    stopEdit(enterPressed or true)
+                end)
+
+                -- Left-click: drag to set value. Right-click: edit value in-place.
                 Items["RealSlider"]:Connect("InputBegan", function(Input)
                     if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+                        if editing then stopEdit(true) end
                         Slider.Sliding = true
                         local Value = Slider:GetSize(Input)
                         Slider:Set(Value)
                     elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                        startEdit()
+                    end
+                end)
+
+                -- Also allow right-click directly on the value label
+                Items["Value"]:Connect("InputBegan", function(Input)
+                    if Input.UserInputType == Enum.UserInputType.MouseButton2 then
                         startEdit()
                     end
                 end)
