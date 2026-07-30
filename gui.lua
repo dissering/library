@@ -204,12 +204,12 @@ do --// UI Source
 
             Library.Font = CustomFont:New("WindowsXPTAHOMA", 400, "Regular", {
                 Id = "WindowsXPTAHOMA",
-                Url = "https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/windows-xp-tahoma.ttf"
+                Url = "https://raw.githubusercontent.com/dissering/library/refs/heads/main/fonts/windows-xp-tahoma.ttf"
             })
 
             Library.BoldFont = CustomFont:New("Tahoma8PTBOLD", 400, "Regular", {
                 Id = "Tahoma8PTBOLD",
-                Url = "https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/TAHOMA-8PT-BOLD-WINDOWS-XP.TTF"
+                Url = "https://raw.githubusercontent.com/dissering/library/refs/heads/main/fonts/TAHOMA-8PT-BOLD-WINDOWS-XP.TTF"
             })
         end
 
@@ -5241,6 +5241,72 @@ do --// UI Source
                 end
 
                 return setmetatable(Textbox, Library)
+            end
+
+            Library.Label = function(Self, Params)
+                Params = Params or { }
+
+                local Label = {
+                    Name = Params.Name or Params.name or "Label",
+                    Flag = Params.Flag or Params.flag or (Params.Name or Params.name),
+                    Default = Params.Default or Params.default or "",
+                    Callback = Params.Callback or Params.callback or function() end,
+
+                    Window = Self.Window,
+                    Page = Self.Page,
+                    Section = Self,
+                    Value = "",
+
+                    Items = { },
+                }
+
+                local Parent
+
+                if Params.Parent then
+                    Parent = Params.Parent
+                else
+                    Parent = Label.Section.Items["Content"]
+                end
+
+                local Items = { } do
+                    Items["Label"] = Library:Create("TextLabel", {
+                        Name = "\0",
+                        FontFace = Library.Font,
+                        TextSize = Library.FontSize,
+                        Parent = Parent.Instance,
+                        TextColor3 = Library.Theme["Inactive Text"],
+                        Text = Label.Name,
+                        Size = UDim2.new(1, -4, 0, 12),
+                        BackgroundTransparency = 1,
+                        Position = UDim2.new(0, 2, 0, 0),
+                        BorderSizePixel = 0,
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        AutomaticSize = Enum.AutomaticSize.Y
+                    }):AddToTheme({TextColor3 = 'Inactive Text'})
+
+                    Library:Create("UIStroke", {
+                        Name = "\0",
+                        Parent = Items["Label"].Instance
+                    })
+
+                    Label.Items = Items
+                end
+
+                function Label:SetText(Text)
+                    Items["Label"].Instance.Text = tostring(Text)
+                end
+
+                function Label:SetVisibility(Bool)
+                    Items["Label"].Instance.Visible = Bool
+                end
+
+                Items["Label"].Instance.Text = Label.Name
+
+                SetFlags[Label.Flag] = function(Value)
+                    Label:SetText(Value)
+                end
+
+                return setmetatable(Label, Library)
             end
 
             Library.InitWindow = function(Self)
