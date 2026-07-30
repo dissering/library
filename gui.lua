@@ -162,17 +162,17 @@ do --// UI Source
 
         local Themes = {
             ["Preset"] = {
-                ["Background"] = Color3.fromRGB(23, 23, 23),
-                ["Inline"] = Color3.fromRGB(22, 22, 22),
-                ["Content"] = Color3.fromRGB(21, 21, 21),
-                ["Text"] = Color3.fromRGB(200, 200, 200),
-                ["Outline 1"] = Color3.fromRGB(35, 35, 35),
-                ["Outline 2"] = Color3.fromRGB(30, 30, 30),
-                ["Outline 3"] = Color3.fromRGB(15, 15, 15),
-                ["Outline 4"] = Color3.fromRGB(10, 10, 10),
-                ["Inactive Text"] = Color3.fromRGB(135, 135, 135),
-                ["Accent"] = Color3.fromRGB(126, 192, 255), -- 126, 192, 255
-                ["Hovered Element"] = Color3.fromRGB(35, 35, 35),
+                ["Background"] = Color3.fromRGB(12, 15, 20),
+                ["Inline"] = Color3.fromRGB(11, 14, 19),
+                ["Content"] = Color3.fromRGB(10, 13, 18),
+                ["Text"] = Color3.fromRGB(210, 220, 235),
+                ["Outline 1"] = Color3.fromRGB(28, 36, 48),
+                ["Outline 2"] = Color3.fromRGB(24, 31, 42),
+                ["Outline 3"] = Color3.fromRGB(14, 18, 25),
+                ["Outline 4"] = Color3.fromRGB(8, 10, 15),
+                ["Inactive Text"] = Color3.fromRGB(120, 135, 155),
+                ["Accent"] = Color3.fromRGB(70, 140, 255),
+                ["Hovered Element"] = Color3.fromRGB(32, 45, 65),
             }
         }
 
@@ -1519,10 +1519,11 @@ do --// UI Source
                     if KeybindObject then
                         KeybindObject:Set(Data.Name, Keybind.Mode)
 
-                        -- if attached to a toggle and toggle is off, show as off
+                        -- when attached to a toggle, reflect the toggle's state
                         local effectiveToggled = Keybind.Toggled
-                        if Data.Toggle and not Data.Toggle.Value then
-                            effectiveToggled = false
+                        if Data.Toggle then
+                            effectiveToggled = Data.Toggle.Value
+                            Keybind.Toggled = Data.Toggle.Value
                         end
 
                         KeybindObject:SetStatus(effectiveToggled)
@@ -1530,11 +1531,7 @@ do --// UI Source
                         if Keybind.Mode == "Hold" then
                             KeybindObject:SetMode(effectiveToggled and "holding" or "off")
                         elseif Keybind.Mode == "Always" then
-                            if Data.Toggle and not Data.Toggle.Value then
-                                KeybindObject:SetMode("off")
-                            else
-                                KeybindObject:SetMode("always on")
-                            end
+                            KeybindObject:SetMode("always on")
                         else
                             KeybindObject:SetMode(effectiveToggled and "toggled" or "off")
                         end
@@ -1709,26 +1706,28 @@ do --// UI Source
                         Keybind:SetOpen(false)
                     end
 
-                    if Data.Toggle and not Data.Toggle.Value then
-                        return
-                    end
-
                     if not GPE then
-                        if tostring(Input.KeyCode) == Keybind.Key then
-                            if Keybind.Mode == "Toggle" then
-                                Keybind:Press()
-                            elseif Keybind.Mode == "Hold" then
-                                Keybind:Press(true)
-                            elseif Keybind.Mode == "Always" then
-                                Keybind:Press(true)
-                            end
-                        elseif tostring(Input.UserInputType) == Keybind.Key then
-                            if Keybind.Mode == "Toggle" then
-                                Keybind:Press()
-                            elseif Keybind.Mode == "Hold" then
-                                Keybind:Press(true)
-                            elseif Keybind.Mode == "Always" then
-                                Keybind:Press(true)
+                        if tostring(Input.KeyCode) == Keybind.Key or tostring(Input.UserInputType) == Keybind.Key then
+                            if Data.Toggle then
+                                -- keybind controls the parent toggle directly
+                                if Keybind.Mode == "Toggle" then
+                                    Data.Toggle:Set(not Data.Toggle.Value)
+                                elseif Keybind.Mode == "Hold" then
+                                    Data.Toggle:Set(true)
+                                elseif Keybind.Mode == "Always" then
+                                    Data.Toggle:Set(true)
+                                end
+                                Keybind.Toggled = Data.Toggle.Value
+                                Update()
+                            else
+                                -- standalone keybind
+                                if Keybind.Mode == "Toggle" then
+                                    Keybind:Press()
+                                elseif Keybind.Mode == "Hold" then
+                                    Keybind:Press(true)
+                                elseif Keybind.Mode == "Always" then
+                                    Keybind:Press(true)
+                                end
                             end
                         end
                     end
@@ -1743,17 +1742,24 @@ do --// UI Source
                         return
                     end
 
-                    if tostring(Input.KeyCode) == Keybind.Key then
-                        if Keybind.Mode == "Hold" then
-                            Keybind:Press(false)
-                        elseif Keybind.Mode == "Always" then
-                            Keybind:Press(true)
-                        end
-                    elseif tostring(Input.UserInputType) == Keybind.Key then
-                        if Keybind.Mode == "Hold" then
-                            Keybind:Press(false)
-                        elseif Keybind.Mode == "Always" then
-                            Keybind:Press(true)
+                    if tostring(Input.KeyCode) == Keybind.Key or tostring(Input.UserInputType) == Keybind.Key then
+                        if Data.Toggle then
+                            -- keybind controls the parent toggle directly
+                            if Keybind.Mode == "Hold" then
+                                Data.Toggle:Set(false)
+                                Keybind.Toggled = false
+                                Update()
+                            elseif Keybind.Mode == "Always" then
+                                Data.Toggle:Set(true)
+                                Keybind.Toggled = true
+                                Update()
+                            end
+                        else
+                            if Keybind.Mode == "Hold" then
+                                Keybind:Press(false)
+                            elseif Keybind.Mode == "Always" then
+                                Keybind:Press(true)
+                            end
                         end
                     end
                 end)
