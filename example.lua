@@ -1,262 +1,103 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/sametexe001/sametlibs/refs/heads/main/secrethaxx/Library.lua"))()
 
 local Window = Library:Window({
-    Logo = "rbxassetid://124454910007637",
-    Build = "Public"
-}) 
+    Name = 'secrethaxx<font color="rgb(126, 192, 255)">.club</font> | developer  | lifetime',
+    Rank = "developer"
+}) do
+    do
+        -- 
+        local Watermark = Window:Watermark({
+            Name = "cappcuino ballerina stuck in washing machine",
+            SubName = "cappcuino ballerina stuck in washing machine diddy"
+        })
 
-local KeybindList = Library:KeybindList()
-local Watermark = Library:Watermark("This is a watermark", "rbxassetid://124454910007637")
-
-do 
-    local Pages = {
-        ["Combat"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
-        ["Combat2"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
-        ["Combat3"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
-        ["Combat4"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
-        ["Combat5"] = Window:Page({Icon = "rbxassetid://113972874520335"}),
-        ["Combat6"] = Window:Page({Icon = "rbxassetid://113972874520335"}), -- wait .. 6 7?
-        ["Combat7"] = Window:Page({Icon = "rbxassetid://113972874520335"}), -- wait .. 6 7?
+        local KeybindList = Window:KeybindList({
+            Name = 'hot<font color="rgb(126, 192, 255)">keys</font>'
+        })
 
         --[[
-            ++++++++++==========+++++**************************+++++++==++++++++****************+++++++*****####
-            ++++++++++===========++++*****************************+++++++++++++++**********+++++++++++++++++****
-            ++++++++++===========++++********************************+++++++++++++******+++++=============++++++
-            ++++++++++============+++**********************************++++++++++++***++++=========--=======++++
-            *+++++++++====-----===++++**************************###*****+++++++++++++++++====-----------========
-            ****++++++====-----====++++************************######****+++++++++++++++=====-----------========
-            ****+++++====-------====+++++**********************#######****+++++++++++++++=====----------========
-            :.:=:::.....:::::::::::::::::::::::::-:...::::::--==++==-:.:::..:::..:::.:::::::::--+#%%#:::::::-===
-            :::--:::....:::::::::::::::::::::::::-:...:-==++=---:::...::....:------::::-==-::::=#+=+#*:...:::--+
-            :::--:::....::::::::::::::::::::::::--:...:---:::.........:-:-:::-----::::=*+#%=...:=====:....:::=-+
-            :::--:::....::::::::::::::::::::-==+=-:...................:::::::-::=**=:::===+:.....-==:....:*%%%=-
-            :::---::....:::::::::::::::-===--=--===--:.................:...::::-####-.:-++-...........==:=*****-
-            :::=--::....::::::::---===--:-==++==-=+=====-:.............:....::::-++=::.:++:.........:-:=***#%%%*
-            :::=--::...:::::::==--:::-==+=+=+++==-=-++++===-:...............:::.:**-.:++=-=::..:-:-==-==+*#%%%@@
-            :::=--:::::.:::::::...:=-+=++++======++-=**+++====-:......::=*=+*#+..:-:::++=++===+++=::-=+++*#%%%%@
-            :::=-=--....:::::::..-=-+--==*++-===+=+===+++++=-==-:...-=++##****+:-=+++***+++++***+-:::=*+===+#%%%
-            ::-==-::...::::::::.-=-=-+===***--=======-++=:-=====-::-*#+##*==++*****#****+++++**#+-+++=+==***+*==
-            :::::::.....:::::::----=+*+=+*+=-=++==-=-----==+++++==--+*==+#**#*###########**##%%#:-**++**###%#*%%
-            .:---::-==-::::::-==--==+===*+-==+++=+++++==++******+---+***#*##**###%%#%%#%%#*#=..::-++====++*##%%%
-            .:++=::#%%@%###+-===-+=++****+*+++====++***######*++++=+=++**####+*#*#%%%#*%%%+....:=++=====#%#%%%%@
-            ::+%#=:-***=+**+==+=******+++++++++=--=+****++++++*###*+++=+*##++*=---=*+*++%*-::-+++*+##%###%%%%%@@
-            ---:---+##*+#%#*==--==++++*+****+++=---+***###*#%**#####+==+*#=-------=====%*=##+==+#%%%###%%%%%%@@@
-            ==+====####+-==+++***#****%*##%+*+==-:-=++*+%%%*****#%###++==**+=---==-=++*+-#%**+***%%%##%%%%%%%@@@
-            =+++==+=#***+++++**####*++=========-::-======++====+*%%%#*+=+*#++=====++==+##%%##++*##%#%%%%%%%%@@@@
-            *++++=++*#+++=++****###=------------::--==----------=#%%#*+=-===--=+**++=-=#%%++*###**#%%%%@@@%@@@@@
-            ***++=+*+*****+*#**###+-:::::::::-:--=+++==----------*%@%#++==-==+**+==----*%@%%####*##@@%@@@@@@@@@@
-            ##**+=+*+-=**#**#**###+:::::::---=*%#+*#@*+---------=*@@%------:::-===-=----+%%%####%%#@@%@@@@@@@@@@
-            ###*+=+*+==++=-=++*###*------=++--+==++++*=--========*@@%*=++=-------==---:::--+%@@@@%%%@@@@@@@@@@@@
-            #%*==++++=-:---=+*#*+##----=+*+=::::--------=++++++++*%%%#++++==-::::---::::---::-+#%@%%@@@@@@@@@@@@
-            @#==+*+*=---=====+++*#*-===+*+-::-===-=-----=++++++++*#%%%**+++=----===----------::--*%%@@@@@@@@@@@@
-            %+=+*+++=----===+******-====+++#*++======**#**+++++++@@%###*+*++==++++===---------===*%%@@@@@@@@@@@@
-            #*****+==----=++**+#*#%%====+=#%%#%@@@@@@@@@@#+==+++*%%%#*#**+++++****+==--------=+=+*@%%@@@@@@@@@@@
-            #%%%#*++=====++++**####@-=--===#%*++*#####%@%++==+++%%@%#***+++++*****+==-::--:::-=++#%%%@@@@@@@@@@@
-            ###*+++======+++*%#%%%#%@==-=---+##=+++++*#+====++*#@%%%#**++++**+****+=::::-======+#%@%%%@@@@@@@@@@
-            ++++++++++++++*%%#*#%%%#@@=----------=====++====+*#@@@%%**%#+=-=*+++*+++=---++++++=+#%%%%%@%@@@@@@@@
-            +======+++++***#%%##%%%%%@%=-----=+++++**+++===+**#%#%%#*+++*=---=+++++++=-=+****+-:=%%%%%@@+-:-*@@@
-            ===+=====++++****####%%%%@@+=------===========+******%##**+*+=----+******+=+*****=::--#%%%#====-=#@@
-            +********###*****+-=***%@@@*==---:--------===+*****+*###*+*#===---==+*****+++****=:::::=*+=+++++*%@@
-            ***********##%##=--====+#%%*====-------====+******++*#**++**=====+----+***++++**++==-:::-=++****%@@@
-            *************#*:----====+##*=-==+======+++********+**+++++*===+*+=-----=*********+***+-==+****#@@@@@
-            *************-::---======+#*=====+++++++********#*###++++*=++**+=------==************++++****#@@@@@@
-            *************=-:----======+**====++++++++*******##****+++++##*+==--=======+******************%@@@@@@
-            **#####****-:--=-------=====++==+++++++++*****##****++++*##*++======+==+++++=****************%@@@@@@
-            %#*+*****-::----=*==------==++*++++++*******#******++**#%#*+++++==+++==++++-==**************#@@@@@@@
-            %%%####=::::------=#*+-=-====++++********#*++++***########+++++++++++++++*++++*************+*######*
-            %%%###::::::--------+#**+======++++**###*++*##****#######*++++++++++++*++*+*%%%***********+++****+++
-            %%%%#=:::------===---=******++++++++++++********#######*++++++++*++++**+*++*###*+*+++++++++++++**+++
-            %%%##:::--------=======+**+++*****+++++*+************#*+++++++++*++++#**++****#=**+*++++++++++*+++++
-            %%%#-:-:--=-----========+++++++++++++++*+++***********+++++++++**+++****+++##**+#**+++++++++++++**+*
-            %%%*------========++====+++++++++++++++*******##****++++++++++*#+++*#**+++**#**+**++++++++++++++++**
-            %%%+-----==========+++===++++++++=++++++*+***###***+++++*++++*#*++*#**+++*#*#********+++++++++++++**
-            %%%=-----===+======+++++=++========++++++****###**++==+**++++*#+++#**+++**#*#************++**++++++*
-            ***-:=---=====+++===+++++=++=======++++++++**##**+++++**++=++#***##*+++***#*#**##***++++++++++++++++
-            %%*---==-======+++==+++++++++=======+++++++**##*++++++*++=++#*++##++********#**##@*******+++++++++++
-            %%-==--========+=++==+*+++++++=+====+++++++*****+++++**+++++#++***#*****#******##@@#******++++++++++
-            %*===----=+++=+=++++=+****+=++++=====++++++*****++++**+++++#*++##*+****##******#%@@@%************++*
-            %+-===--=====*===++**++****++++======+++++*****+++***+++++**++#**++++*********##%@@@@%**************
-            %+-=======+===++++++*++*****+++=======++++*****+*****+++++#++#*++++*********#**#@@@@@@@#**********#%
-            @+==========++**++++*#++****++++=======++++********++++++**+**+++++*********##%@@@@@@@@@%*#****##%@@
-            %*--=+=========++*+****++****+++======++++***********++++#**#*++++********##**%@@@@@@@@@%%####%@@@@@
-            %#--=++===+======+*+**#++***#*+=+=====++++******#%%##*++***#++++++*****##*****%@@@@@@@@@%%%%@@@@@@@@
-            @@=-==++====++====+***********++=====++++********#*###%*#*#++++***#***********%@@@@%@@@@@@@%@@@@@@@@
-            ++++++++++++++******************************############********++++++++++++++++++++++++++++++++++++
-            ++++++++++++++++++++*************************##########*******+++++++++++++++++++++++++++++++++**+++
-            +++++++++++++++++++++************************########********+++++++++++++++++++++++++++++++******++
-            +++++++++++++++++++++*****************#****###*###*##**#*****+*++++++++++++++++++++++++++++*******++
-            ++++++++++++++++++++++****************#@==@%==%==@+===*@%#=-#%+++++++++++++++++++++++++++*********++
-            +++++++++++++++++++++++***************##::-:-@*:=%::*-.:@.*::#*+++++++++++++++*++++++++**********+++
-            ++++++++++++++++++++++++**************%-:::%%@=:**:=@#:-@--.=%*++++++++++++++****+++++***********+++
-            ++++++++++++++++++++++++*************#@::*.:@@::%=.+@-:#@::@*+++++++++++++++******+++***********++++
-            +++++++++++++++++++++++**************#%::@#::%::@::::=%#@.-@+++++++++++++++******+++***********+++++
-            +++++++++++++++++++++++++*************######*******+*++++***++++++++++++++*******+++***********++++*
-            ====+++++++++++++++++++++++**********###*******++++++++++++++++++++++++++********************++++++*
-        ]]
-    }
+        local StaffList = Window:StaffList({
+            Name ='staff<font color="rgb(0, 80, 255)"> list</font>'
+        })
 
-    local SettingsPage = Library:CreateSettingsPage(Window, KeybindList, Watermark)
+        StaffList:Add("samet", "owner")
+        StaffList:Add("samet", "owner")
+        StaffList:Add("samet", "owner")
 
-    do -- Combat 1
-        local SubPages = {
-            ["Ragebot"] = Pages["Combat"]:SubPage({Name = "Ragebot"}),
-            ["Aimbot"] = Pages["Combat"]:SubPage({Name = "Aimbot"}),
-            ["Visuals"] = Pages["Combat"]:SubPage({Name = "Visuals"}),
-            ["Misc"] = Pages["Combat"]:SubPage({Name = "Misc"})
-        }
+        local TargetIndicator = Window:TargetIndicator({
+            Name = "target<font color='rgb(0, 80, 255)'> info</font>"
+        })
 
-        do -- Ragebot
-            local SectionLeft = SubPages["Ragebot"]:Section({Name = "General"})
-            local SectionRight = SubPages["Ragebot"]:Section({Name = "General"})
+        TargetIndicator:SetTarget(game:GetService("Players").LocalPlayer)
 
-            do -- Section left
-                local NoticesBulgeOwoWhatsThisQuestionMark = SectionLeft:Toggle({
-                    Name = "Toggle",
-                    Flag = "Toggle",
-                    Default = false,
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
+        task.spawn(function()
+            while task.wait(1) do 
+                game.Players.LocalPlayer.Character.Humanoid.Health = math.random(30, 100)
 
-                for i = 1, 20 do 
-                    SectionLeft:Toggle({
-                        Name = "Toggle "..i,
-                        Flag = "Toggle"..i,
-                        Default = false,
-                        Callback = function(Value)
-                            print(Value)
-                        end
-                    })
-                end
-
-                NoticesBulgeOwoWhatsThisQuestionMark:Colorpicker({
-                    Flag = "Colorpicker",
-                    Default = Color3.fromRGB(255, 255, 255),
-                    Alpha = 0,
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                NoticesBulgeOwoWhatsThisQuestionMark:Keybind({
-                    Name = "Yo ts a keybind",
-                    Flag = "Keybind",
-                    Default = Enum.KeyCode.RightShift,
-                    Mode = "Toggle",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                SectionLeft:Button({
-                    Name = "Button",
-                    Callback = function()
-                        print("Button")
-                    end
-                })
-
-                SectionLeft:Slider({
-                    Name = "Slider",
-                    Flag = "Slider",
-                    Default = 50,
-                    Compact = false,
-                    Min = 0,
-                    Max = 100,
-                    Decimals = 1,
-                    Suffix = "%",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                SectionLeft:Slider({
-                    Name = "Slider",
-                    Flag = "Slider",
-                    Default = 50,
-                    Compact = true,
-                    Min = 0,
-                    Max = 100,
-                    Decimals = 1,
-                    Suffix = "%",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                SectionLeft:Dropdown({
-                    Name = "Dropdown",
-                    Flag = "Dropdown",
-                    Multi = false,
-                    Items = {"First", "Second", "Third", "Fourth", "Fifth", "Sixth"},
-                    Default = "First",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                local murderalljewsandhangallniggers=SectionLeft:Label("jasdasd")
-                for i=1,5 do
-                    murderalljewsandhangallniggers:Colorpicker({
-                        Flag = "Colorpicker"..i,
-                        Default = Color3.fromRGB(math.random(1, 255), math.random(1, 255), math.random(1, 255)),
-                        Alpha = 0,
-                        Callback = function(Value)
-                            print(Value)
-                        end
-                    })
-                end
-
-                SectionLeft:Textbox({
-                    Name = "Textbox",
-                    Flag = "Textbox",
-                    Placeholder = "...",
-                    Numeric = false,
-                    Finished = false,
-                    Default = "yo gurt",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-
-                SectionLeft:Searchbox({
-                    Name = "Searchbox",
-                    Flag = "Searchbox",
-                    Multi = false,
-                    Items = {"First", "Second", "Third", "Fourth", "Fifth", "Sixth"},
-                    Default = "First",
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
+                --TargetIndicator:ClearItems()
             end
+        end)
 
-            do -- Section right
-                SectionRight:Toggle({
-                    Name = "Toggle",
-                    Flag = "Toggle2",
-                    Default = false,
-                    Callback = function(Value)
-                        print(Value)
-                    end
-                })
-            end
-        end
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        TargetIndicator:AddItem("rbxassetid://125055486069298")
+        --]]
     end
 
-    do -- Combat 2
-        local SubPages = {
-            ["Weapon"] = Pages["Combat2"]:SubPage({Name = "Weapon"}),
-            ["Silent Aim"] = Pages["Combat2"]:SubPage({Name = "Silent Aim"}),
-            ["Visuals"] = Pages["Combat2"]:SubPage({Name = "Visuals"}),
-            ["Misc"] = Pages["Combat2"]:SubPage({Name = "Misc"})
-        }
+    local CombatPage = Window:Page({Name = "combat"})
+    local MiscPage = Window:Page({Name = "misc"})
+    local VisualsPage = Window:Page({Name = "visuals"})
+    local PlayersPage = Window:Page({Name = "players"})
 
-        do -- Ragebot
-            local SectionLeft = SubPages["Weapon"]:Section({Name = "General"})
-            local SectionRight = SubPages["Weapon"]:Section({Name = "General"})
+    do -- combat
+        local aimbot = CombatPage:Section({Name = "aimbot", Side = 1}) 
+        local multisection = CombatPage:MultiSection({Side = 2})
+        local aimbot2 = multisection:Add("aimbot")
+        local aimbot3 = multisection:Add("aimbot")
+
+        do -- aimbot
+            local toggleporn = aimbot:Toggle({Name = "aimbot", Flag = "aimbot", Default = false})   
+            aimbot:Button({Name = "aimbot", Callback = function()
+                print("aimbot")
+            end})         
+            aimbot:Slider({Name = "aimbot", Flag = "aimbot", Min = 0, Max = 100, Default = 0, Decimals = 1, Suffix = "ft"})
+            aimbot:Dropdown({Name = "aimbot", Flag = "aimbot", Items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, Multi = false})
+
+            toggleporn:Colorpicker({Flag = "aimbot", Default = Color3.fromRGB(255, 255, 255)})
+            local toggleporn = aimbot:Toggle({Name = "aimbot", Flag = "aimbot", Default = false}) 
+            toggleporn:Keybind({Name = "aimbot keybind", Flag = "aimbot", Default = Enum.UserInputType.MouseButton2})
+
+            aimbot:Textbox({Name = "aimbot", Flag = "aimbot", Numeric = true, Placeholder = "Enter a number", Default = ""})
+            aimbot:Textbox({Name = "aimbot", Flag = "aimbot", Numeric = false, Finished = false, Placeholder = "Enter anything", Default = ""})
+        end
+
+        do -- aimbot2
+            local togglesex = aimbot2:Toggle({Name = "test toggle", Flag = "diddy"})
+            local Settinghs = togglesex:Settings()
+
+            Settinghs:Button({Name = "aimbot", Callback = function()
+                print("aimbot")
+            end})         
+            Settinghs:Slider({Name = "aimbot", Flag = "aimbot", Min = 0, Max = 100, Default = 0, Decimals = 1, Suffix = "ft"})
+            Settinghs:Dropdown({Name = "aimbot", Flag = "aimbot", Items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, Multi = false})
         end
     end
 end
 
-Library:Notification("Welcome back, Loaded in "..string.format("%.4f", os.clock() - LoadingTick).." seconds", 5, Library.Theme.Accent)
+task.spawn(function()
+    for i = 1, 10 do 
+        Library:Notification({
+            Name = "notificationnononononononon",
+            Time = 5
+        })
+        task.wait(0.5)
+    end
+end)
+
+Window:InitWindow()
