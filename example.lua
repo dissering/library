@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/sametexe001/sametlibs/refs/heads/main/secrethaxx/Library.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dissering/library/refs/heads/main/gui.lua"))()
 
 local Window = Library:Window({
     Name = 'secrethaxx<font color="rgb(126, 192, 255)">.club</font> | developer  | lifetime',
